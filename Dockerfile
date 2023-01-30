@@ -1,26 +1,26 @@
-FROM centos:7
+FROM debian:jessie
 
 MAINTAINER Sagnik Sasmal, <sagnik@sagnik.me>
 
 # Ignore APT warnings about not having a TTY
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install OS deps
-RUN yum update -q -y \
-	&& yum install -q -y \
-		gcc-c++ \
-		glibc-devel \
-		glibc-devel.i686 \
-		make \
+RUN dpkg --add-architecture i386 \
+	&& apt-get -qq update \
+	&& apt-get -qq upgrade -y \
+	&& apt-get -qq install -y --no-install-recommends \
+		ca-certificates \
 		wget \
+		g++-multilib \
+		make \
 		git \
 		unzip \
 		vim \
 		less \
 		man \
-		openssl-devel.i686 \
-		mariadb-devel.i686 \
-	&& yum clean all \
+		libmysqlclient \
+		libssl-dev:i386 \
+		libmariadb-dev:i386 \
     && useradd -d /home/container -m container
 
 ENV LANG en_US.UTF-8
