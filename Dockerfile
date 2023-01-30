@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM centos:7
 
 MAINTAINER Sagnik Sasmal, <sagnik@sagnik.me>
 
@@ -6,18 +6,21 @@ MAINTAINER Sagnik Sasmal, <sagnik@sagnik.me>
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install OS deps
-RUN apt-get update \
-    && apt-get dist-upgrade -y \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
-    && dpkg --add-architecture i386 \
-    && apt-get update \
-    && apt-get -y install curl ca-certificates openssl git tar sqlite fontconfig tzdata iproute2 locales rsync \
-    && apt-get -y install libstdc++6 lib32stdc++6 tar curl iproute2 openssl \
-    && apt-get -y install default-libmysqlclient-dev libtbb2:i386 libtbb-dev:i386 libicu-dev:i386 \
-    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    && locale-gen en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/* \
+RUN yum update -q -y \
+	&& yum install -q -y \
+		gcc-c++ \
+		glibc-devel \
+		glibc-devel.i686 \
+		make \
+		wget \
+		git \
+		unzip \
+		vim \
+		less \
+		man \
+		openssl-devel.i686 \
+		mariadb-devel.i686 \
+	&& yum clean all \
     && useradd -d /home/container -m container
 
 ENV LANG en_US.UTF-8
