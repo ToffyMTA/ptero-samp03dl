@@ -5,6 +5,7 @@ LABEL       author="denNorske" maintainer="den@ducky.rocks"
 RUN         dpkg --add-architecture i386 \
             && apt update \
             && apt upgrade -y \
+			&& apt intsall software-properties-common \
 			&& add-apt-repository ppa:ubuntu-toolchain-r/test \
             && apt update \
             && apt upgrade -y \
