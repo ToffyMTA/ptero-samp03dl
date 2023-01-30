@@ -1,36 +1,19 @@
-FROM debian:jessie
+FROM        ubuntu:18.04
 
-MAINTAINER Sagnik Sasmal, <sagnik@sagnik.me>
+LABEL       author="denNorske" maintainer="den@ducky.rocks"
 
-# Ignore APT warnings about not having a TTY
-ENV DEBIAN_FRONTEND noninteractive
+RUN         dpkg --add-architecture i386 \
+            && apt update \
+            && apt upgrade -y \
+            && apt install -y libmysqlclient18 libstdc++6 lib32stdc++6 tar curl iproute2 openssl1.0:i386\
+            && apt install -y libtbb2:i386 libtbb-dev:i386 \
+            && useradd -d /home/container -m container
 
-RUN dpkg --add-architecture i386 \
-	&& apt-get -qq update \
-	&& apt-get -qq upgrade -y \
-	&& apt-get -qq install -y --no-install-recommends \
-		ca-certificates \
-		wget \
-		g++-multilib \
-		make \
-		git \
-		unzip \
-		vim \
-		less \
-		man \
-		libmysqlclient \
-		libssl-dev:i386 \
-		libmariadb-dev:i386 \
-    && useradd -d /home/container -m container
+USER        container
+ENV         USER=container HOME=/home/container
 
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+WORKDIR     /home/container
 
-USER container
-ENV USER=container HOME=/home/container
+COPY        ./entrypoint.sh /entrypoint.sh
 
-WORKDIR /home/container
-
-COPY ./entrypoint.sh /entrypoint.sh
-
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD         ["/bin/bash", "/entrypoint.sh"]
