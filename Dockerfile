@@ -1,4 +1,4 @@
-FROM        ubuntu:10.04
+FROM        ubuntu:12.04
 
 LABEL       author="denNorske" maintainer="den@ducky.rocks"
 
